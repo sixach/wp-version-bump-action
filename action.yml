@@ -1,6 +1,10 @@
 # action.yaml
 name: 'WP Version SemVer Update'
 description: 'Updates the Version of your Plugin or Theme'
+author: 'Fred Bradley'
+branding:
+  icon: chevron-right,
+  color: black
 inputs:
   version:
     description: 'SemVer version'
