@@ -1,0 +1,14 @@
+# action.yaml
+name: 'WP Version SemVer Update'
+description: 'Updates the Version of your Plugin or Theme'
+inputs:
+  version:
+    description: 'SemVer version'
+    required: true
+  file_path:
+    description: 'the file we are updating'
+    required: true
+runs:
+      using: 'node12'
+      main: 'bumpversion.js'
+
