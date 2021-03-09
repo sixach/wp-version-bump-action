@@ -10,7 +10,7 @@ const filePath = core.getInput('file_path')
 if (fs.existsSync(filePath)) {
     // File Exists
 } else {
-    throw new Error("File " + filePath + " does not exist")
+    core.setFailed("File "+ filePath + " does not exist");
 }
 
 // Valid SemVer
@@ -19,7 +19,7 @@ if (regex.test(newVersion)) {
     console.log("Version Valid")
 } else {
     console.log("Version Invalid")
-    throw new Error("Version Invalid")
+    core.setFailed("Version Invalid");
 }
 
 // Now things are valid, lets do the thing...
