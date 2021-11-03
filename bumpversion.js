@@ -1,7 +1,6 @@
 const fs = require('fs');
 
 const core = require('@actions/core')
-const github = require('@actions/github')
 
 const newVersion = core.getInput('version')
 const filePath = core.getInput('file_path')
@@ -29,7 +28,7 @@ fs.readFile(filePath, 'utf8', function (err, data) {
     }
 
     // Change the version string and save to result var
-    var result = data.replace(/^(\s*?Version:\s+?)\d+\.\d+\.\d+/mg, '$1' + newVersion)
+    var result = data.replace(/(\s*?Version:\s+?)\d+\.\d+\.\d+/mg, '$1' + newVersion)
 
     // Write the changes back to the file
     fs.writeFile(filePath, result, 'utf8', function (err) {
