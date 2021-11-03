@@ -7,9 +7,7 @@ const newVersion = core.getInput('version')
 const filePath = core.getInput('file_path')
 
 // Check if File Exists
-if (fs.existsSync(filePath)) {
-    // File Exists
-} else {
+if (!fs.existsSync(filePath)) {
     core.setFailed("File "+ filePath + " does not exist");
 }
 
@@ -26,12 +24,12 @@ if (regex.test(newVersion)) {
 // Read the file
 fs.readFile(filePath, 'utf8', function (err, data) {
     if (err) {
-        // if there's an error of some kind then return that to console log
+        // If there's an error of some kind then return that to console log
         return console.log(err)
     }
 
-    // change the version string and save to result var
-    var result = data.replace(/^(\s?)+Version: \d+\.\d+\.\d+$/mg, 'Version: ' + newVersion)
+    // Change the version string and save to result var
+    var result = data.replace(/^(\s*?Version:\s+?)\d+\.\d+\.\d+/mg, '$1' + newVersion)
 
     // Write the changes back to the file
     fs.writeFile(filePath, result, 'utf8', function (err) {
