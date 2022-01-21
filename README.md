@@ -17,11 +17,9 @@ Let's say you have this header:
  * Description:          Here goes custom description of the plugin
  * Version:              1.0.0
  * Tags:                 block, gutenberg, sixa
- * Contributors:         sixa, mahdiyazdani, gookaani, kuserich
  * Author:               sixa AG
  * Author URI:           https://sixa.ch
  * License:              GPLv3 or later
- * License URI:          https://www.gnu.org/licenses/gpl-3.0.html
  */
 ```
 
@@ -36,11 +34,9 @@ If you run this action with param `version` set to `1.1.0`, it's gonna change he
  * Description:          Here goes custom description of the plugin
  * Version:              1.1.0
  * Tags:                 block, gutenberg, sixa
- * Contributors:         sixa, mahdiyazdani, gookaani, kuserich
  * Author:               sixa AG
  * Author URI:           https://sixa.ch
  * License:              GPLv3 or later
- * License URI:          https://www.gnu.org/licenses/gpl-3.0.html
  */
 ```
 
