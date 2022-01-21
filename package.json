@@ -22,8 +22,8 @@
     "versioning",
     "wordpress"
   ],
-	"license": "GPL-3.0-or-later",
-	"author": "sixa AG",
+  "license": "GPL-3.0-or-later",
+  "author": "sixa AG",
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0"
@@ -33,6 +33,7 @@
     "@vercel/ncc": "^0.33.1",
     "eslint": "^8.7.0",
     "eslint-plugin-github": "^4.3.5",
+    "eslint-plugin-jest": "^25.7.0",
     "jest": "^27.4.7",
     "prettier": "^2.5.1",
     "ts-jest": "^27.1.3",
