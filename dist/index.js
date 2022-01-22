@@ -39,15 +39,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
+const utils_1 = __nccwpck_require__(918);
 const fs_1 = __importDefault(__nccwpck_require__(147));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const newVersion = core.getInput('version');
         const filePath = core.getInput('file_path');
-        // Check if File Exists
-        if (!fs_1.default.existsSync(filePath)) {
-            core.setFailed(`⚠️ File ${filePath} does not exist`);
-        }
+        const realFilePath = (0, utils_1.retrieveFilePath)(filePath);
         // Valid SemVer
         const regex = new RegExp(/^\d+\.\d+\.\d+$/gm);
         if (regex.test(newVersion)) {
@@ -58,23 +56,100 @@ function run() {
         }
         // Now things are valid, lets do the thing...
         // Read the file
-        fs_1.default.readFile(filePath, 'utf8', function (readError, data) {
+        fs_1.default.readFile(realFilePath, 'utf8', (readError, data) => {
             if (readError instanceof Error) {
                 // If there's an error of some kind then stop execution
                 core.setFailed(`⚠️ Could not read the file - ${readError.message}`);
             }
-            // Change the version string and save to result var
-            const result = data.replace(/(\s*?Version:\s+?)\d+\.\d+\.\d+/gm, `$1${newVersion}`);
-            // Write the changes back to the file
-            fs_1.default.writeFile(filePath, result, 'utf8', function (writeError) {
-                if (writeError instanceof Error) {
-                    core.setFailed(`⚠️ Could not write the file to disk - ${writeError.message}`);
-                }
-            });
+            // Only if data is not empty
+            if (data) {
+                // Change the version string and save to result const
+                const result = data.replace(/(\s*?Version:\s+?)\d+\.\d+\.\d+/gm, `$1${newVersion}`);
+                // Write the changes back to the file
+                (0, utils_1.writeOutput)(realFilePath, result);
+            }
+            else {
+                // It seems like file is empty
+                core.setFailed(`⚠️ File is empty, no data been read`);
+            }
         });
     });
 }
 run();
+
+
+/***/ }),
+
+/***/ 918:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.writeOutput = exports.retrieveFilePath = void 0;
+const core = __importStar(__nccwpck_require__(186));
+const path = __importStar(__nccwpck_require__(17));
+const fs_1 = __importStar(__nccwpck_require__(147));
+/**
+ * Resolves the file path, relatively to the GITHUB_WORKSPACE
+ *
+ * @param providedPath {String} Provided path to plugin/theme's file
+ * @returns {String} Real path inside the Github workspace
+ */
+function retrieveFilePath(providedPath) {
+    let githubWorkspacePath = process.env['GITHUB_WORKSPACE'];
+    if (!githubWorkspacePath) {
+        throw new Error('GITHUB_WORKSPACE not defined');
+    }
+    githubWorkspacePath = path.resolve(githubWorkspacePath);
+    core.debug(`GITHUB_WORKSPACE = '${githubWorkspacePath}'`);
+    // Resolve path to file
+    const filePath = path.resolve(githubWorkspacePath, providedPath);
+    core.debug(`file_path = '${filePath}'`);
+    // Check if File Exists
+    if (!fs_1.default.existsSync(filePath)) {
+        core.setFailed(`⚠️ File ${filePath} does not exist`);
+    }
+    return filePath;
+}
+exports.retrieveFilePath = retrieveFilePath;
+/**
+ * Writes the data to the given file
+ *
+ * @param outputFile {String} Absolute path to target file
+ * @param data {String} Content of the file
+ */
+function writeOutput(outputFile, data) {
+    try {
+        (0, fs_1.writeFileSync)(outputFile, data, {
+            encoding: 'utf8'
+        });
+    }
+    catch (writeError) {
+        if (writeError instanceof Error) {
+            core.setFailed(`⚠️ Could not write the file to disk - ${writeError.message}`);
+        }
+    }
+}
+exports.writeOutput = writeOutput;
 
 
 /***/ }),
