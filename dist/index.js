@@ -143,10 +143,8 @@ function writeOutput(outputFile, data) {
             encoding: 'utf8'
         });
     }
-    catch (writeError) {
-        if (writeError instanceof Error) {
-            core.setFailed(`⚠️ Could not write the file to disk - ${writeError.message}`);
-        }
+    catch (writeError /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
+        core.setFailed(`⚠️ Could not write the file to disk - ${writeError.message}`);
     }
 }
 exports.writeOutput = writeOutput;

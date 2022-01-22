@@ -4,7 +4,7 @@ import path, {join} from 'path'
 import * as core from '@actions/core'
 import {tmpdir} from 'os'
 
-import {retrieveFilePath} from '../src/utils'
+import {retrieveFilePath, writeOutput} from '../src/utils'
 
 describe('Utils tests', () => {
   const ORIGINAL_GITHUB_WORKSPACE = process.env['GITHUB_WORKSPACE']
@@ -16,7 +16,7 @@ describe('Utils tests', () => {
   // Copy test projects into temporary directory
   beforeAll(async () => {
     // Create temporary directory
-    workspace = mkdtempSync(join(tmpdir(), 'version-test'))
+    workspace = mkdtempSync(join(tmpdir(), 'utils-test'))
     // Copy all the projects
     await copy(join(__dirname, 'projects'), workspace)
     // Change directory
@@ -41,23 +41,23 @@ describe('Utils tests', () => {
     remove(workspace)
   })
 
-  describe('For utils', () => {
-    describe('Workspace', () => {
-      beforeAll(() => {
-        delete process.env['GITHUB_WORKSPACE']
-      })
-
-      afterAll(() => {
-        process.env['GITHUB_WORKSPACE'] = workspace
-      })
-
-      it('Throws error if workspace is undefined', async () => {
-        expect(() => {
-          retrieveFilePath('./testTheme/style.css')
-        }).toThrowError(`GITHUB_WORKSPACE not defined`)
-      })
+  describe('Workspace', () => {
+    beforeAll(() => {
+      delete process.env['GITHUB_WORKSPACE']
     })
 
+    afterAll(() => {
+      process.env['GITHUB_WORKSPACE'] = workspace
+    })
+
+    it('Throws error if workspace is undefined', async () => {
+      expect(() => {
+        retrieveFilePath('./testTheme/style.css')
+      }).toThrowError(`GITHUB_WORKSPACE not defined`)
+    })
+  })
+
+  describe('retrieveFilePath()', () => {
     it('Throws error if no file found', async () => {
       retrieveFilePath('./testTheme/nonExistentFile.css')
       const nonExistent = path.join(
@@ -73,6 +73,18 @@ describe('Utils tests', () => {
       const expectedPath = path.join(workspace, './testTheme/style.css')
       expect(retrieveFilePath('./testTheme/style.css')).toEqual(expectedPath)
       expect(spyDebug).toBeCalledWith(expect.stringMatching(/^file_path = .*/))
+    })
+  })
+
+  describe('writeOutput()', () => {
+    it('Throws error if file cannot be written', async () => {
+      // Try to use non allowed characters in file name
+      await writeOutput('', 'FAKE DATA')
+      expect(spySetFailed).toBeCalledWith(
+        expect.stringMatching(
+          /^⚠️ Could not write the file to disk - ENOENT: no such file.*/
+        )
+      )
     })
   })
 })

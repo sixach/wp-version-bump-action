@@ -39,11 +39,9 @@ export function writeOutput(outputFile: string, data: string): void {
     writeFileSync(outputFile, data, {
       encoding: 'utf8'
     })
-  } catch (writeError) {
-    if (writeError instanceof Error) {
-      core.setFailed(
-        `⚠️ Could not write the file to disk - ${writeError.message}`
-      )
-    }
+  } catch (writeError: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
+    core.setFailed(
+      `⚠️ Could not write the file to disk - ${writeError.message}`
+    )
   }
 }
