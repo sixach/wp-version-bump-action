@@ -56,7 +56,7 @@ function run() {
         // Now things are valid, lets do the thing...
         // Read the file
         fs_1.default.readFile(realFilePath, 'utf8', (readError, data) => {
-            if (readError instanceof Error) {
+            if (readError) {
                 // If there's an error of some kind then stop execution
                 core.setFailed(`⚠️ Could not read the file - ${readError.message}`);
             }
