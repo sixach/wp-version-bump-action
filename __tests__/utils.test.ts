@@ -73,6 +73,9 @@ describe('Utils tests', () => {
       const expectedPath = path.join(workspace, './testTheme/style.css')
       expect(retrieveFilePath('./testTheme/style.css')).toEqual(expectedPath)
       expect(spyDebug).toBeCalledWith(expect.stringMatching(/^file_path = .*/))
+      expect(spySetFailed).not.toBeCalledWith(
+        `⚠️ File ${expectedPath} does not exist`
+      )
     })
   })
 
