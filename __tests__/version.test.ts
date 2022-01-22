@@ -1,6 +1,6 @@
 import {validVersion} from '../src/utils'
 
-describe('validVersion()', () => {
+describe('Version tests', () => {
   it.each([
     ['x', null],
     ['v1', null],

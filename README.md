@@ -49,6 +49,7 @@ Add the following step to your job.
   with:
     # Required. New version.
     # Action will try to replace current version with a new one.
+    # Version string should follow SemVer standard.
     version: 1.3.5
 
     # Required. Relative path to the working directory
