@@ -1,18 +1,17 @@
 import * as core from '@actions/core'
-import {retrieveFilePath, writeOutput} from './utils'
+import {retrieveFilePath, validVersion, writeOutput} from './utils'
 import fs from 'fs'
 
 async function run(): Promise<void> {
-  const newVersion = core.getInput('version')
+  const newVersion = validVersion(core.getInput('version'))
   const filePath = core.getInput('file_path')
   const realFilePath = retrieveFilePath(filePath)
 
-  // Valid SemVer
-  const regex = new RegExp(/^\d+\.\d+\.\d+$/gm)
-  if (regex.test(newVersion)) {
-    core.debug('✅ Version Valid')
+  // Check if it's a valid SemVer
+  if (newVersion) {
+    core.debug('✅ Valid SemVer version string provided')
   } else {
-    core.setFailed('❌ Version Invalid')
+    core.setFailed('❌ Invalid SemVer version string provided')
   }
 
   // Now things are valid, lets do the thing...

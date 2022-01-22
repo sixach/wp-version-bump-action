@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as path from 'path'
+import * as semver from 'semver'
 import fs, {writeFileSync} from 'fs'
 
 /**
@@ -44,4 +45,12 @@ export function writeOutput(outputFile: string, data: string): void {
       `⚠️ Could not write the file to disk - ${writeError.message}`
     )
   }
+}
+
+/**
+ * Return the parsed version, or null if it's not valid.
+ * @param version {String} Version value to be parsed
+ */
+export function validVersion(version: string): string | null {
+  return semver.valid(version)
 }

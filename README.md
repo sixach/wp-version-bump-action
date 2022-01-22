@@ -2,7 +2,7 @@
 
 This is a custom action to bump version of WordPress plugin/theme. Can be used for PHP files, as well as for style.css (in case of a theme).
 
-Every WordPress theme/plugin is required to have header with all the information, such as title, tagging, author, donate link etc. This action tried to find `Version:` string inside the header and replace number with a new one.
+Every WordPress theme/plugin is required to have header with all the information, such as title, tagging, author, donate link etc. This action tried to find `Version:` string inside the header and replace number with a new one. The version string should follow the [SemVer](https://semver.org/) standard.
 
 ## Example
 
