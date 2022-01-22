@@ -1,4 +1,4 @@
-import {mkdtempSync} from 'fs'
+import {mkdtempSync, existsSync, readFileSync} from 'fs'
 import {copy, remove} from 'fs-extra'
 import path, {join} from 'path'
 import * as core from '@actions/core'
@@ -78,13 +78,21 @@ describe('Utils tests', () => {
 
   describe('writeOutput()', () => {
     it('Throws error if file cannot be written', async () => {
-      // Try to use non allowed characters in file name
-      await writeOutput('', 'FAKE DATA')
+      // Try to use empty string as a file name
+      writeOutput('', 'FAKE DATA')
       expect(spySetFailed).toBeCalledWith(
         expect.stringMatching(
           /^⚠️ Could not write the file to disk - ENOENT: no such file.*/
         )
       )
+    })
+
+    it('Correctly writes data to file', () => {
+      // Try to create a dummy file in workspace directory
+      const testFile = path.join(workspace, './test.txt')
+      writeOutput(testFile, 'FAKE DATA')
+      expect(existsSync(testFile)).toBe(true)
+      expect(readFileSync(testFile, 'utf-8')).toEqual('FAKE DATA')
     })
   })
 })
