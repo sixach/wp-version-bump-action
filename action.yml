@@ -1,16 +1,16 @@
 # action.yaml
-name: 'WP Version SemVer Update'
-description: 'Updates the Version of your Plugin or Theme'
-author: 'Fred Bradley'
+name: 'WP Version Bump Action'
+description: 'Action to bump WordPress plugin/theme version '
+author: 'Sixa'
 branding:
   icon: chevron-right
   color: black
 inputs:
   version:
-    description: 'SemVer version'
+    description: 'New version, should follow SemVer standard'
     required: true
   file_path:
-    description: 'the file we are updating'
+    description: 'Relative path to the file to be modified'
     required: true
 runs:
       using: 'node12'
